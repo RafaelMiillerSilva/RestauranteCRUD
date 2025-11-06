@@ -8,9 +8,11 @@
         @csrf
         @method('PUT')
 
+        {{-- Cliente --}}
         <div class="mb-3">
             <label>Cliente</label>
             <select name="cliente_id" class="form-select" required>
+                <option value="">Selecione</option>
                 @foreach($clientes as $cliente)
                     <option value="{{ $cliente->id }}" {{ $encomenda->cliente_id == $cliente->id ? 'selected' : '' }}>
                         {{ $cliente->nome }}
@@ -19,6 +21,16 @@
             </select>
         </div>
 
+        {{-- Status --}}
+        <div class="mb-3">
+            <label>Status</label>
+            <select name="status" class="form-select">
+                <option value="pendente" {{ $encomenda->status !== 'pago' ? 'selected' : '' }}>Pendente</option>
+                <option value="pago" {{ $encomenda->status === 'pago' ? 'selected' : '' }}>Pago</option>
+            </select>
+        </div>
+
+        {{-- Pratos --}}
         <h5>Pratos</h5>
         <div id="pratos-container">
             @foreach($encomenda->itens as $item)

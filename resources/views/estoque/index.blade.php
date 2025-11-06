@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>📦 Estoque</h2>
+        <h2> Estoque</h2>
         <a href="{{ route('estoque.create') }}" class="btn btn-primary">+ Novo Estoque</a>
     </div>
 

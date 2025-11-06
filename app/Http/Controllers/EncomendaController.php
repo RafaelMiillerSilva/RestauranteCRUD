@@ -160,4 +160,13 @@ class EncomendaController extends Controller
 
         return redirect()->route('encomendas.index')->with('success', 'Encomenda excluída e estoque restaurado!');
     }
+
+    public function toggleStatus(Encomenda $encomenda)
+{
+    $encomenda->status = $encomenda->status === 'pago' ? 'pendente' : 'pago';
+    $encomenda->save();
+
+    return response()->json(['success' => true]);
+}
+
 }

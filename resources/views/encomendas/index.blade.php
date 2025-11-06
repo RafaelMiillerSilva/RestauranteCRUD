@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>📦 Encomendas</h2>
+        <h2> Encomendas</h2>
         <a href="{{ route('encomendas.create') }}" class="btn btn-success">+ Nova Encomenda</a>
     </div>
 
@@ -18,7 +18,7 @@
                 <th>Cliente</th>
                 <th>Data</th>
                 <th>Valor Total (R$)</th>
-                <th>Status</th>
+                <th>Pago</th>
                 <th class="text-end">Ações</th>
             </tr>
         </thead>
@@ -29,9 +29,16 @@
                 <td>{{ $encomenda->cliente->nome }}</td>
                 <td>{{ \Carbon\Carbon::parse($encomenda->data)->format('d/m/Y H:i') }}</td>
                 <td>{{ number_format($encomenda->valor_total, 2, ',', '.') }}</td>
-                <td>{{ $encomenda->status ?? 'Pendente' }}</td>
+
+                <td class="text-center">
+                    <input type="checkbox" class="status-toggle"
+                        data-id="{{ $encomenda->id }}"
+                        {{ $encomenda->status === 'pago' ? 'checked' : '' }}>
+                </td>
+
                 <td class="text-end">
                     <a href="{{ route('encomendas.edit', $encomenda) }}" class="btn btn-sm btn-warning">✏️ Editar</a>
+
                     <form action="{{ route('encomendas.destroy', $encomenda) }}" method="POST" class="d-inline">
                         @csrf
                         @method('DELETE')
@@ -43,4 +50,21 @@
         </tbody>
     </table>
 </div>
+
+{{-- SCRIPT PARA MARCAR COMO PAGO --}}
+<script>
+document.querySelectorAll('.status-toggle').forEach(chk => {
+    chk.addEventListener('change', function() {
+        fetch(`/encomendas/${this.dataset.id}/status`, {
+            method: 'PATCH',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        })
+        .then(res => res.json())
+        .then(res => console.log(res.message));
+    });
+});
+</script>
+
 @endsection

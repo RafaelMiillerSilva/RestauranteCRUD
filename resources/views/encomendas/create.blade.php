@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h1>📦 Nova Encomenda</h1>
+    <h1> Nova Encomenda</h1>
 
     <form action="{{ route('encomendas.store') }}" method="POST">
         @csrf

@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h1 class="mb-4">🍽️ Pratos</h1>
+    <h1 class="mb-4"> Pratos</h1>
     <a href="{{ route('pratos.create') }}" class="btn btn-success mb-4">Novo Prato</a>
 
     <div class="row">
