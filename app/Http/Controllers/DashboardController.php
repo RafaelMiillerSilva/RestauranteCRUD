@@ -16,7 +16,7 @@ class DashboardController extends Controller
         $totalClientes = Cliente::count();
         $totalPratos = Prato::count();
 
-        $totalVendas = DB::table('encomendas')->sum('valor_total');
+        $totalVendas = DB::table('encomendas')->where('status', 'pago')->sum('valor_total');
         $aReceber = DB::table('encomendas')->where('status', 'pendente')->sum('valor_total');
         $aPagar = DB::table('compras')->where('status', 'pendente')->sum('valor_total');
 

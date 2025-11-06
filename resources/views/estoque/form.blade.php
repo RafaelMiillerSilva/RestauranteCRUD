@@ -14,14 +14,17 @@
             <label>Ingrediente</label>
             <select name="ingrediente_id" class="form-select" required>
                 @foreach($ingredientes as $ing)
-                    <option value="{{ $ing->id }}" @if(isset($estoque) && $estoque->ingrediente_id == $ing->id) selected @endif>{{ $ing->nome }}</option>
+                    <option value="{{ $ing->id }}" @if(isset($estoque) && $estoque->ingrediente_id == $ing->id) selected @endif>
+                        {{ $ing->nome }} ({{ $ing->unidade_medida }})
+                    </option>
                 @endforeach
             </select>
         </div>
 
         <div class="mb-3">
             <label>Quantidade Atual</label>
-            <input type="number" step="0.01" name="quantidade_atual" class="form-control" value="{{ $estoque->quantidade_atual ?? '' }}" required>
+            <input type="number" step="0.01" name="quantidade_atual" class="form-control" 
+                   value="{{ old('quantidade_atual', $estoque->quantidade_atual ?? '') }}" required>
         </div>
 
         <button type="submit" class="btn btn-primary">Salvar</button>

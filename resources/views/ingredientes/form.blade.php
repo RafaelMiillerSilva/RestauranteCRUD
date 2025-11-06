@@ -17,7 +17,7 @@
 
         <div class="mb-3">
             <label>Unidade de Medida</label>
-            <input type="text" name="unidade_medida" class="form-control" value="{{ $ingrediente->unidade_medida ?? '' }}" required>
+            <input type="text" name="unidade" class="form-control" value="{{ $ingrediente->unidade_medida ?? '' }}" required>
         </div>
 
         <div class="mb-3">

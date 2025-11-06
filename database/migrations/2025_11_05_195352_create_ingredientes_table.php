@@ -10,7 +10,7 @@ return new class extends Migration {
         Schema::create('ingredientes', function (Blueprint $table) {
             $table->id();
             $table->string('nome');
-            $table->string('unidade')->nullable(); // Ex: 'kg', 'L', 'un'
+            $table->string('unidade_medida')->nullable(); // Ex: 'kg', 'L', 'un'
             $table->decimal('preco', 10, 2)->default(0); // preço unitário
             $table->timestamps();
         });   
