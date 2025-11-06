@@ -2,17 +2,24 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Compra extends Model
 {
-    use HasFactory;
+    protected $fillable = ['nota_fiscal', 'fornecedor', 'data_compra', 'valor_total', 'status'];
 
-    protected $fillable = ['nota_fiscal', 'fornecedor', 'data_compra', 'valor_total'];
-
-    public function itens()
+    public function itens(): HasMany
     {
         return $this->hasMany(ItemCompra::class);
+    }
+
+    // Atualiza o valor total automaticamente
+    public function atualizarValorTotal()
+    {
+        $this->valor_total = $this->itens->sum(function ($item) {
+            return $item->quantidade * $item->preco_unitario;
+        });
+        $this->save();
     }
 }

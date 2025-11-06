@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{Prato, Ingrediente};
 use Illuminate\Http\Request;
+use App\Models\Prato;
+use App\Models\Ingrediente;
 
 class PratoController extends Controller
 {
@@ -21,25 +22,47 @@ class PratoController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'nome' => 'required',
-            'descricao' => 'nullable',
-            'preco' => 'required|numeric',
-            'ingredientes' => 'array',
-            'quantidades' => 'array'
-        ]);
+        $prato = Prato::create($request->only(['nome', 'descricao', 'preco']));
 
-        $prato = Prato::create($data);
-
-        if ($request->ingredientes) {
-            foreach ($request->ingredientes as $key => $idIngrediente) {
-                $prato->ingredientes()->attach($idIngrediente, [
-                    'quantidade' => $request->quantidades[$key]
-                ]);
-            }
+        // Vincula os ingredientes
+        $ingredientes = $request->input('ingredientes', []);
+        $quantidades = $request->input('quantidades', []);
+        $syncData = [];
+        foreach ($ingredientes as $index => $id) {
+            if($id) $syncData[$id] = ['quantidade' => $quantidades[$index] ?? 0];
         }
+        $prato->ingredientes()->sync($syncData);
 
-        return redirect()->route('pratos.index')->with('success', 'Prato criado com sucesso!');
+        return redirect()->route('pratos.index')->with('success', 'Prato criado!');
+    }
+
+    public function edit(Prato $prato)
+    {
+        $ingredientes = Ingrediente::all();
+        $prato->load('ingredientes');
+        return view('pratos.edit', compact('prato', 'ingredientes'));
+    }
+
+    public function update(Request $request, Prato $prato)
+    {
+        $prato->update($request->only(['nome', 'descricao', 'preco']));
+
+        $ingredientes = $request->input('ingredientes', []);
+        $quantidades = $request->input('quantidades', []);
+        $syncData = [];
+        foreach ($ingredientes as $index => $id) {
+            if($id) $syncData[$id] = ['quantidade' => $quantidades[$index] ?? 0];
+        }
+        $prato->ingredientes()->sync($syncData);
+
+        return redirect()->route('pratos.index')->with('success', 'Prato atualizado!');
+    }
+
+    public function destroy(Prato $prato)
+    {
+        $prato->ingredientes()->detach();
+        $prato->delete();
+        return redirect()->route('pratos.index')->with('success', 'Prato removido!');
     }
 }
 

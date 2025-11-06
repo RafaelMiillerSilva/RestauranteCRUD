@@ -11,7 +11,8 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('cliente_id')->constrained('clientes')->onDelete('cascade');
             $table->date('data');
-            $table->decimal('total', 10, 2)->default(0);
+            $table->decimal('valor_total', 10, 2)->default(0); // padronizado com o dashboard
+            $table->string('status')->default('pendente'); // usado no dashboard
             $table->timestamps();
         });
     }

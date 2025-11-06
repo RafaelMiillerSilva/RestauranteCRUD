@@ -9,11 +9,10 @@ return new class extends Migration {
     {
         Schema::create('itens_venda', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('venda_id')->constrained('vendas')->onDelete('cascade');
+            $table->foreignId('encomenda_id')->constrained('encomendas')->onDelete('cascade');
             $table->foreignId('prato_id')->constrained('pratos')->onDelete('cascade');
-            $table->integer('quantidade');
+            $table->decimal('quantidade', 10, 2);
             $table->decimal('preco_unitario', 10, 2);
-            $table->decimal('subtotal', 10, 2);
             $table->timestamps();
         });
     }

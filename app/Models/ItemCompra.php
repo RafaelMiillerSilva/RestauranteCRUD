@@ -2,21 +2,26 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ItemCompra extends Model
 {
-    use HasFactory;
+    protected $table = 'itens_compra';
 
-    protected $fillable = ['compra_id', 'ingrediente_id', 'quantidade', 'preco_unitario'];
+    protected $fillable = [
+        'compra_id',
+        'ingrediente_id',
+        'quantidade',
+        'preco_unitario',
+    ];
 
-    public function compra()
+    public function compra(): BelongsTo
     {
         return $this->belongsTo(Compra::class);
     }
 
-    public function ingrediente()
+    public function ingrediente(): BelongsTo
     {
         return $this->belongsTo(Ingrediente::class);
     }

@@ -19,6 +19,14 @@
                             <li>{{ $ing->nome }} - {{ $ing->pivot->quantidade }} {{ $ing->unidade_medida }}</li>
                         @endforeach
                     </ul>
+
+                    <a href="{{ route('pratos.edit', $prato->id) }}" class="btn btn-warning btn-sm">Editar</a>
+
+                    <form action="{{ route('pratos.destroy', $prato->id) }}" method="POST" style="display:inline-block;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Deseja realmente excluir?')">Apagar</button>
+                    </form>
                 </div>
             </div>
         </div>

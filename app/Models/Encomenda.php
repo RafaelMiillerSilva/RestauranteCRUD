@@ -2,29 +2,32 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Encomenda extends Model
 {
-    use HasFactory;
+    protected $fillable = ['cliente_id', 'data', 'valor_total', 'status'];
 
-    protected $fillable = ['cliente_id', 'data', 'valor_total'];
+    // Relação com itens da encomenda
+    public function itens(): HasMany
+    {
+        return $this->hasMany(ItemVenda::class, 'encomenda_id');
+    }
 
-    public function cliente()
+    // Relação com cliente
+    public function cliente(): BelongsTo
     {
         return $this->belongsTo(Cliente::class);
     }
 
-    public function pratos()
+    // Atualiza o valor total da encomenda
+    public function atualizarValorTotal()
     {
-        return $this->belongsToMany(Prato::class)
-                    ->withPivot('quantidade', 'preco_unitario')
-                    ->withTimestamps();
-    }
-
-    public function itens()
-    {
-        return $this->hasMany(EncomendaItem::class);
+        $this->valor_total = $this->itens->sum(function ($item) {
+            return $item->quantidade * $item->preco_unitario;
+        });
+        $this->save();
     }
 }

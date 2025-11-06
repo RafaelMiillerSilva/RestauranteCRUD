@@ -41,13 +41,14 @@
 <body>
     <!-- Sidebar -->
     <div class="sidebar d-flex flex-column p-3">
-        <h3 class="text-center mb-4">🍽️ Gestão</h3>
-        <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">📊 Dashboard</a>
-        <a href="{{ route('clientes.index') }}" class="{{ request()->routeIs('clientes.*') ? 'active' : '' }}">👥 Clientes</a>
-        <a href="{{ route('pratos.index') }}" class="{{ request()->routeIs('pratos.*') ? 'active' : '' }}">🍲 Pratos</a>
-        <a href="{{ route('ingredientes.index') }}" class="{{ request()->routeIs('ingredientes.*') ? 'active' : '' }}">🥦 Ingredientes</a>
-        <a href="{{ route('encomendas.index') }}" class="{{ request()->routeIs('encomendas.*') ? 'active' : '' }}">💰 Encomendas</a>
-        <a href="{{ route('compras.index') }}" class="{{ request()->routeIs('compras.*') ? 'active' : '' }}">🧾 Compras</a>
+        <h3 class="text-center mb-4"> Gestão</h3>
+        <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}"> Dashboard</a>
+        <a href="{{ route('clientes.index') }}" class="{{ request()->routeIs('clientes.*') ? 'active' : '' }}"> Clientes</a>
+        <a href="{{ route('pratos.index') }}" class="{{ request()->routeIs('pratos.*') ? 'active' : '' }}"> Pratos</a>
+        <a href="{{ route('ingredientes.index') }}" class="{{ request()->routeIs('ingredientes.*') ? 'active' : '' }}"> Ingredientes</a>
+        <a href="{{ route('estoque.index') }}" class="{{ request()->routeIs('estoque.*') ? 'active' : '' }}"> Estoque</a>
+        <a href="{{ route('encomendas.index') }}" class="{{ request()->routeIs('encomendas.*') ? 'active' : '' }}"> Encomendas</a>
+        <a href="{{ route('compras.index') }}" class="{{ request()->routeIs('compras.*') ? 'active' : '' }}"> Compras</a>
     </div>
 
     <!-- Conteúdo -->
