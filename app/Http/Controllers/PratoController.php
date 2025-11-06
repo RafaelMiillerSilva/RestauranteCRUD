@@ -2,64 +2,44 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Prato;
+use App\Models\{Prato, Ingrediente};
 use Illuminate\Http\Request;
 
 class PratoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $pratos = Prato::with('ingredientes')->get();
+        return view('pratos.index', compact('pratos'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $ingredientes = Ingrediente::all();
+        return view('pratos.create', compact('ingredientes'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
-    }
+        $data = $request->validate([
+            'nome' => 'required',
+            'descricao' => 'nullable',
+            'preco' => 'required|numeric',
+            'ingredientes' => 'array',
+            'quantidades' => 'array'
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Prato $prato)
-    {
-        //
-    }
+        $prato = Prato::create($data);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Prato $prato)
-    {
-        //
-    }
+        if ($request->ingredientes) {
+            foreach ($request->ingredientes as $key => $idIngrediente) {
+                $prato->ingredientes()->attach($idIngrediente, [
+                    'quantidade' => $request->quantidades[$key]
+                ]);
+            }
+        }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Prato $prato)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Prato $prato)
-    {
-        //
+        return redirect()->route('pratos.index')->with('success', 'Prato criado com sucesso!');
     }
 }
+

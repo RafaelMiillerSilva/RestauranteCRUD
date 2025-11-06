@@ -7,18 +7,18 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('compras', function (Blueprint $table) {
+        Schema::create('contas_pagar', function (Blueprint $table) {
             $table->id();
-            $table->string('nota_fiscal')->unique();
-            $table->string('fornecedor');
-            $table->date('data_compra');
-            $table->decimal('valor_total', 10, 2)->default(0);
+            $table->string('descricao');
+            $table->decimal('valor', 10, 2);
+            $table->date('data_vencimento');
+            $table->boolean('pago')->default(false);
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('compras');
+        Schema::dropIfExists('contas_pagar');
     }
 };

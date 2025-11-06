@@ -1,5 +1,6 @@
 <?php
 
+// database/migrations/xxxx_xx_xx_create_estoque_table.php
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -7,18 +8,16 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('compras', function (Blueprint $table) {
+        Schema::create('estoque', function (Blueprint $table) {
             $table->id();
-            $table->string('nota_fiscal')->unique();
-            $table->string('fornecedor');
-            $table->date('data_compra');
-            $table->decimal('valor_total', 10, 2)->default(0);
+            $table->foreignId('ingrediente_id')->constrained('ingredientes')->onDelete('cascade');
+            $table->decimal('quantidade_atual', 10, 2)->default(0);
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('compras');
+        Schema::dropIfExists('estoque');
     }
 };

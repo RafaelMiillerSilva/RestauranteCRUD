@@ -2,71 +2,77 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Encomenda;
+use App\Models\{Encomenda, EncomendaItem, Cliente, Prato, Estoque};
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class EncomendaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $encomendas = Encomenda::with('cliente')->get();
+        return view('encomendas.index', compact('encomendas'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $clientes = Cliente::all();
+        $pratos = Prato::all();
+        return view('encomendas.create', compact('clientes', 'pratos'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
-    }
+        $data = $request->validate([
+            'cliente_id' => 'required',
+            'pratos' => 'required|array',
+            'quantidades' => 'required|array',
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Encomenda $encomenda)
-    {
-        //
-    }
+        DB::transaction(function () use ($request) {
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Encomenda $encomenda)
-    {
-        //
-    }
+            $encomenda = Encomenda::create([
+                'cliente_id' => $request->cliente_id,
+                'data' => now(),
+                'valor_total' => 0
+            ]);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Encomenda $encomenda)
-    {
-        //
-    }
+            $valorTotal = 0;
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Encomenda $encomenda)
-    {
-        //
-    }
+            foreach ($request->pratos as $i => $pratoId) {
+                $prato = Prato::with('ingredientes')->findOrFail($pratoId);
+                $quantidade = (int)$request->quantidades[$i];
+                $preco = $prato->preco;
 
-    public function relatorio()
-    {
-    $encomendas = Encomenda::with('cliente', 'pratos')->get();
-    return view('relatorios.encomendas', compact('encomendas'));
-    }
+                // cria item da encomenda
+                $encomenda->itens()->create([
+                    'prato_id' => $pratoId,
+                    'quantidade' => $quantidade,
+                    'preco_unitario' => $preco
+                ]);
 
+                $valorTotal += $preco * $quantidade;
+
+                // desconta do estoque os ingredientes usados neste prato
+                foreach ($prato->ingredientes as $ingrediente) {
+                    $qtdNecessaria = $ingrediente->pivot->quantidade * $quantidade;
+
+                    $estoque = Estoque::where('ingrediente_id', $ingrediente->id)->first();
+
+                    if ($estoque) {
+                        $estoque->quantidade_atual -= $qtdNecessaria;
+                        if ($estoque->quantidade_atual < 0) {
+                            $estoque->quantidade_atual = 0; // evita negativo
+                        }
+                        $estoque->save();
+                    }
+                }
+            }
+
+            $encomenda->update(['valor_total' => $valorTotal]);
+        });
+
+        return redirect()->route('encomendas.index')->with('success', 'Encomenda criada e estoque atualizado!');
+    }
 }
+

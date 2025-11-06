@@ -7,18 +7,19 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('encomenda_prato', function (Blueprint $table) {
+        Schema::create('itens_venda', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('encomenda_id')->constrained('encomendas')->onDelete('cascade');
+            $table->foreignId('venda_id')->constrained('vendas')->onDelete('cascade');
             $table->foreignId('prato_id')->constrained('pratos')->onDelete('cascade');
             $table->integer('quantidade');
             $table->decimal('preco_unitario', 10, 2);
+            $table->decimal('subtotal', 10, 2);
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('encomenda_prato');
+        Schema::dropIfExists('itens_venda');
     }
 };

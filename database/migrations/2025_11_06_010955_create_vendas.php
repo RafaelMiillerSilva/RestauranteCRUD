@@ -7,18 +7,17 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('compras', function (Blueprint $table) {
+        Schema::create('vendas', function (Blueprint $table) {
             $table->id();
-            $table->string('nota_fiscal')->unique();
-            $table->string('fornecedor');
-            $table->date('data_compra');
-            $table->decimal('valor_total', 10, 2)->default(0);
+            $table->foreignId('cliente_id')->constrained('clientes')->onDelete('cascade');
+            $table->decimal('valor_total', 10, 2);
+            $table->date('data_venda');
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('compras');
+        Schema::dropIfExists('vendas');
     }
 };
