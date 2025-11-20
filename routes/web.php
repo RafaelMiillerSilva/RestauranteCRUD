@@ -22,7 +22,10 @@ Route::resource('clientes', ClienteController::class);
 Route::resource('pratos', PratoController::class);
 Route::resource('ingredientes', IngredienteController::class);
 Route::resource('estoque', EstoqueController::class);
+
+// Compras
 Route::resource('compras', ComprasController::class);
+Route::patch('/compras/{compra}/status', [ComprasController::class, 'toggleStatus'])->name('compras.toggleStatus');
 
 // ------------------------------
 // Encomendas

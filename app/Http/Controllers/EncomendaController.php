@@ -57,8 +57,8 @@ class EncomendaController extends Controller
                     $qtdNecessaria = $ingrediente->pivot->quantidade * $quantidade;
                     $estoque = Estoque::where('ingrediente_id', $ingrediente->id)->first();
                     if ($estoque) {
-                        $estoque->quantidade_atual -= $qtdNecessaria;
-                        if ($estoque->quantidade_atual < 0) $estoque->quantidade_atual = 0;
+                        $estoque->quantidade -= $qtdNecessaria;
+                        if ($estoque->quantidade < 0) $estoque->quantidade = 0;
                         $estoque->save();
                     }
                 }
@@ -94,7 +94,7 @@ class EncomendaController extends Controller
                     $qtdUsada = $ingrediente->pivot->quantidade * $item->quantidade;
                     $estoque = Estoque::where('ingrediente_id', $ingrediente->id)->first();
                     if ($estoque) {
-                        $estoque->quantidade_atual += $qtdUsada;
+                        $estoque->quantidade += $qtdUsada;
                         $estoque->save();
                     }
                 }
@@ -122,8 +122,8 @@ class EncomendaController extends Controller
                     $qtdNecessaria = $ingrediente->pivot->quantidade * $quantidade;
                     $estoque = Estoque::where('ingrediente_id', $ingrediente->id)->first();
                     if ($estoque) {
-                        $estoque->quantidade_atual -= $qtdNecessaria;
-                        if ($estoque->quantidade_atual < 0) $estoque->quantidade_atual = 0;
+                        $estoque->quantidade -= $qtdNecessaria;
+                        if ($estoque->quantidade < 0) $estoque->quantidade = 0;
                         $estoque->save();
                     }
                 }
@@ -148,7 +148,7 @@ class EncomendaController extends Controller
                     $qtdUsada = $ingrediente->pivot->quantidade * $item->quantidade;
                     $estoque = Estoque::where('ingrediente_id', $ingrediente->id)->first();
                     if ($estoque) {
-                        $estoque->quantidade_atual += $qtdUsada;
+                        $estoque->quantidade += $qtdUsada;
                         $estoque->save();
                     }
                 }
@@ -168,5 +168,11 @@ class EncomendaController extends Controller
 
     return response()->json(['success' => true]);
 }
+
+    public function show(Encomenda $encomenda)
+    {
+        $encomenda->load('itens.prato', 'cliente');
+        return view('encomendas.show', compact('encomenda'));
+    }
 
 }

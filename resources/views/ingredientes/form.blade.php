@@ -17,11 +17,11 @@
 
         <div class="mb-3">
             <label>Unidade de Medida</label>
-            <input type="text" name="unidade" class="form-control" value="{{ $ingrediente->unidade_medida ?? '' }}" required>
+            <input type="text" name="unidade_medida" class="form-control" value="{{ $ingrediente->unidade_medida ?? '' }}">
         </div>
 
         <div class="mb-3">
-            <label>Preço Unitário (R$)</label>
+            <label>Preco Unitario (R$)</label>
             <input type="number" step="0.01" name="preco" class="form-control" value="{{ $ingrediente->preco ?? '' }}" required>
         </div>
 

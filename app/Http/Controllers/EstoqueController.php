@@ -23,8 +23,8 @@ class EstoqueController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'ingrediente_id' => 'required|exists:ingredientes,id',
-            'quantidade_atual' => 'required|numeric|min:0',
+            'ingrediente_id' => 'required|exists:ingredientes,id|unique:estoques,ingrediente_id',
+            'quantidade' => 'required|numeric|min:0',
         ]);
 
         Estoque::create($request->all());
@@ -41,8 +41,8 @@ class EstoqueController extends Controller
     public function update(Request $request, Estoque $estoque)
     {
         $request->validate([
-            'ingrediente_id' => 'required|exists:ingredientes,id',
-            'quantidade_atual' => 'required|numeric|min:0',
+            'ingrediente_id' => 'required|exists:ingredientes,id|unique:estoques,ingrediente_id,' . $estoque->id,
+            'quantidade' => 'required|numeric|min:0',
         ]);
 
         $estoque->update($request->all());

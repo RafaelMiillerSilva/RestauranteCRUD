@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Estoque extends Model
 {
+    use HasFactory;
+
+    protected $table = 'estoques';
+
     protected $fillable = ['ingrediente_id', 'quantidade'];
 
     public function ingrediente()

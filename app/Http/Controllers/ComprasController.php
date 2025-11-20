@@ -21,7 +21,9 @@ class ComprasController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'nota_fiscal' => 'required|string|unique:compras',
             'fornecedor' => 'required|string|max:255',
+            'data_compra' => 'required|date',
             'valor_total' => 'required|numeric|min:0',
             'status' => 'required|in:pendente,pago',
         ]);
@@ -39,7 +41,9 @@ class ComprasController extends Controller
     public function update(Request $request, Compra $compra)
     {
         $request->validate([
+            'nota_fiscal' => 'required|string|unique:compras,nota_fiscal,' . $compra->id,
             'fornecedor' => 'required|string|max:255',
+            'data_compra' => 'required|date',
             'valor_total' => 'required|numeric|min:0',
             'status' => 'required|in:pendente,pago',
         ]);
@@ -53,5 +57,13 @@ class ComprasController extends Controller
     {
         $compra->delete();
         return redirect()->route('compras.index')->with('success', 'Compra excluída!');
+    }
+
+    public function toggleStatus(Compra $compra)
+    {
+        $compra->status = $compra->status === 'pago' ? 'pendente' : 'pago';
+        $compra->save();
+
+        return response()->json(['success' => true, 'status' => $compra->status]);
     }
 }

@@ -22,11 +22,11 @@ class IngredienteController extends Controller
     {
         $request->validate([
             'nome' => 'required|string|max:255',
-            'unidade' => 'required|string|max:50', // ajustado
+            'unidade_medida' => 'nullable|string|max:50',
             'preco' => 'required|numeric|min:0',
         ]);
 
-        Ingrediente::create($request->only(['nome', 'unidade', 'preco'])); // ajustado
+        Ingrediente::create($request->only(['nome', 'unidade_medida', 'preco']));
 
         return redirect()->route('ingredientes.index')->with('success', 'Ingrediente criado com sucesso!');
     }
@@ -40,11 +40,11 @@ class IngredienteController extends Controller
     {
         $request->validate([
             'nome' => 'required|string|max:255',
-            'unidade' => 'required|string|max:50', // ajustado
+            'unidade_medida' => 'nullable|string|max:50',
             'preco' => 'required|numeric|min:0',
         ]);
 
-        $ingrediente->update($request->only(['nome', 'unidade', 'preco'])); // ajustado
+        $ingrediente->update($request->only(['nome', 'unidade_medida', 'preco']));
 
         return redirect()->route('ingredientes.index')->with('success', 'Ingrediente atualizado!');
     }

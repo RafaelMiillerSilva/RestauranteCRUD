@@ -9,7 +9,7 @@ class Ingrediente extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nome', 'unidade_medida'];
+    protected $fillable = ['nome', 'unidade_medida', 'preco'];
 
     public function pratos()
     {
